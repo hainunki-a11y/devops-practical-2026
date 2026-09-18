@@ -1,0 +1,6 @@
+node {
+ stage('Checkout') { git 'https://github.com/hainunki-a11y/devops-practical-2026.git' }
+ stage('Build') { sh 'python src/app.py' }
+ stage('Test') { sh 'python -m pytest tests/' }
+ stage('Deploy') { sh 'bash deploy.sh' }
+}
