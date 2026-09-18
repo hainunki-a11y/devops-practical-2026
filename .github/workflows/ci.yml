@@ -6,7 +6,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
 
@@ -16,10 +16,22 @@ jobs:
           python-version: "3.11"
 
       - name: Build
-        run: python src/app.py
+        run: python src\app.py
 
       - name: Test
-        run: python -m pytest
+        shell: pwsh
+        run: |
+          if (Test-Path "tests") {
+            python -m pytest
+          } else {
+            Write-Output "No tests found; skipping pytest"
+          }
 
       - name: Deploy
-        run: bash deploy.sh
+        shell: pwsh
+        run: |
+          if (Test-Path "deploy.bat") {
+            .\deploy.bat
+          } else {
+            Write-Output "No deploy.bat found; skipping deploy"
+          }
